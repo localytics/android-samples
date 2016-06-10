@@ -44,6 +44,14 @@
             </intent-filter>
         </service>
 
+        <receiver
+            android:name="com.localytics.android.ReferralReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER" />
+            </intent-filter>
+        </receiver>
+
         <meta-data
             android:name="LOCALYTICS_APP_KEY"
             android:value="YOUR-LOCALYTICS-APP-KEY" />
