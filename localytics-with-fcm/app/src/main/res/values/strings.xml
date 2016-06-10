@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Localytics with FCM</string>
+    <string name="tag_event">Tag Event</string>
+</resources>
