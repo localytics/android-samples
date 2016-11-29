@@ -41,8 +41,6 @@
             </intent-filter>
         </receiver>
 
-        <service android:name="com.localytics.android.GcmListenerService" />
-
         <activity android:name="com.localytics.android.PushTrackingActivity"/>
 
         <receiver
