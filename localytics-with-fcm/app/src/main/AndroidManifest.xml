@@ -28,8 +28,6 @@
 
         <activity android:name="com.localytics.android.PushTrackingActivity"/>
 
-        <service android:name="com.localytics.android.GcmListenerService" />
-
         <service
             android:name="com.localytics.android.sample.fcm.MyFirebaseMessagingService">
             <intent-filter>
