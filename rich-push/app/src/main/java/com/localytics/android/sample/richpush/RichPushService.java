@@ -70,7 +70,7 @@ public class RichPushService extends Service
         }
     }
 
-    private void showNotification(@NonNull Intent intent, @Nullable  Bitmap bitmap)
+    private void showNotification(@NonNull Intent intent, @Nullable Bitmap bitmap)
     {
         Intent trackingIntent = new Intent(this, PushTrackingActivity.class);
         trackingIntent.putExtras(intent); // add all extras PushTrackingActivity can properly tag open event
@@ -78,64 +78,67 @@ public class RichPushService extends Service
                 PendingIntent.FLAG_ONE_SHOT);
 
         String message = intent.getStringExtra("message");
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle("Image Push Message")
-                .setContentText(message)
-                .setAutoCancel(true)
-                .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE)
-                .setContentIntent(pendingIntent);
+        if (!TextUtils.isEmpty(message) || bitmap != null)
+        {
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
+                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setContentTitle("Image Push Message")
+                    .setContentText(message)
+                    .setAutoCancel(true)
+                    .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE)
+                    .setContentIntent(pendingIntent);
 
-        if (bitmap != null)
-        {
-            builder.setStyle(new NotificationCompat.BigPictureStyle()
-                    .bigPicture(bitmap)
-                    .setSummaryText(message));
-        }
-        else
-        {
-            builder.setStyle(new NotificationCompat.BigTextStyle()
-                    .bigText(message));
-        }
-
-        String actionCategory = intent.getStringExtra("action_category");
-        if (!TextUtils.isEmpty(actionCategory))
-        {
-            switch (actionCategory)
+            if (bitmap != null)
             {
-                case "social":
-                    Intent likeIntent = new Intent(this, NotificationActionsReceiver.class);
-                    likeIntent.putExtra("action", "like");
-                    likeIntent.putExtras(intent); // add all extras so we can track opened in receiver
-                    builder.addAction(
-                            android.R.drawable.ic_media_play, // just picking a random icon
-                            "Like",
-                            PendingIntent.getBroadcast(this, 1, likeIntent, 0));
-
-                    Intent shareIntent = new Intent(this, NotificationActionsReceiver.class);
-                    shareIntent.putExtra("action", "share");
-                    shareIntent.putExtras(intent); // add all extras so we can track opened in receiver
-                    builder.addAction(
-                            android.R.drawable.ic_media_next, // just picking a random icon
-                            "Share",
-                            PendingIntent.getBroadcast(this, 2, shareIntent, 0));
-                    break;
-                case "product":
-                    Intent buyIntent = new Intent(this, NotificationActionsReceiver.class);
-                    buyIntent.putExtra("action", "buy");
-                    buyIntent.putExtras(intent); // add all extras so we can track opened in receiver
-                    builder.addAction(
-                            android.R.drawable.ic_media_pause, // just picking a random icon
-                            "Buy",
-                            PendingIntent.getBroadcast(this, 3, buyIntent, 0));
-                    break;
+                builder.setStyle(new NotificationCompat.BigPictureStyle()
+                                         .bigPicture(bitmap)
+                                         .setSummaryText(message));
             }
+            else
+            {
+                builder.setStyle(new NotificationCompat.BigTextStyle()
+                                         .bigText(message));
+            }
+
+            String actionCategory = intent.getStringExtra("action_category");
+            if (!TextUtils.isEmpty(actionCategory))
+            {
+                switch (actionCategory)
+                {
+                    case "social":
+                        Intent likeIntent = new Intent(this, NotificationActionsReceiver.class);
+                        likeIntent.putExtra("action", "like");
+                        likeIntent.putExtras(intent); // add all extras so we can track opened in receiver
+                        builder.addAction(
+                                android.R.drawable.ic_media_play, // just picking a random icon
+                                "Like",
+                                PendingIntent.getBroadcast(this, 1, likeIntent, 0));
+
+                        Intent shareIntent = new Intent(this, NotificationActionsReceiver.class);
+                        shareIntent.putExtra("action", "share");
+                        shareIntent.putExtras(intent); // add all extras so we can track opened in receiver
+                        builder.addAction(
+                                android.R.drawable.ic_media_next, // just picking a random icon
+                                "Share",
+                                PendingIntent.getBroadcast(this, 2, shareIntent, 0));
+                        break;
+                    case "product":
+                        Intent buyIntent = new Intent(this, NotificationActionsReceiver.class);
+                        buyIntent.putExtra("action", "buy");
+                        buyIntent.putExtras(intent); // add all extras so we can track opened in receiver
+                        builder.addAction(
+                                android.R.drawable.ic_media_pause, // just picking a random icon
+                                "Buy",
+                                PendingIntent.getBroadcast(this, 3, buyIntent, 0));
+                        break;
+                }
+            }
+
+            NotificationManager notificationManager =
+                    (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+            notificationManager.notify(0, builder.build());
         }
-
-        NotificationManager notificationManager =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-        notificationManager.notify(0, builder.build());
 
         // Stop the service
         stopSelf();
