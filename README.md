@@ -5,3 +5,4 @@
 * [Push Configuration with a Custom GcmListenerService](custom-gcmlistenerservice)
 * [Push Configuration with a Standard BroadcastReceiver](standard-push-broadcastreceiver)
 * [Rich Push Examples](rich-push)
+* [Places Dwell Time triggering](places-dwell-time)
