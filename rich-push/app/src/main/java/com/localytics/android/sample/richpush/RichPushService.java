@@ -39,10 +39,10 @@ public class RichPushService extends Service
 
     private void handleIntent(final Intent intent)
     {
-        if (!TextUtils.isEmpty(intent.getStringExtra("image_url")))
+        if (!TextUtils.isEmpty(intent.getStringExtra("ll_attachment_url")))
         {
             Picasso.with(this)
-                    .load(intent.getStringExtra("image_url"))
+                    .load(intent.getStringExtra("ll_attachment_url"))
                     .into(new Target()
                     {
                         @Override
