@@ -15,6 +15,8 @@ import com.localytics.android.Localytics;
 
 import java.util.Map;
 
+import static android.R.attr.handle;
+
 public class MyFirebaseMessagingService extends FirebaseMessagingService
 {
 
@@ -29,14 +31,25 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService
         Map<String, String> data = remoteMessage.getData();
         if (data != null)
         {
-            if (data.containsKey("ll"))
-            {
-                Localytics.displayPushNotification(convertMap(data));
-            }
-            else
-            {
-                showNotification(data.get("message"));
-            }
+            //Use the contents of this method if you are using SDK 4.4 or greater.
+            handleNotificationInSDK44(data);
+
+            //Use the contents of this method if you are using SDK 4.3 or lower.
+            handleNotificationInSDKLessThan44(data);
+        }
+    }
+
+    private void handleNotificationInSDK44(final Map<String, String> data) {
+        if (!Localytics.handleFirebaseMessage(data)) {
+            showNotification(data.get("message"));
+        }
+    }
+
+    private void handleNotificationInSDKLessThan44(final Map<String, String> data) {
+        if (data.containsKey("ll") || data.containsKey("localyticsUninstallTrackingPush")) {
+            Localytics.displayPushNotification(convertMap(data));
+        } else {
+            handleNotificationInSDK44(data);
         }
     }
 
