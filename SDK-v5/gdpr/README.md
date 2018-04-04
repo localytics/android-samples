@@ -1,6 +1,7 @@
 # GDPR Compliant example
 
-Sample project demonstrating the integration of Localytics for a customer supporting GDPR. This app ensures that the correct opted out status is always reported to Localytics, including when that status has changed in another service, such as a webpage. 
+Sample project demonstrating the integration of Localytics for a customer supporting GDPR. You can click [here](https://docs.localytics.com/dev/android.html#gdpr) to read the Localytics Documentation on GDPR.
+This app ensures that the correct opted out status is always reported to Localytics, including when that status has changed in another service, such as a webpage. 
 
 ## Prerequisites
 

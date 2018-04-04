@@ -27,7 +27,7 @@ public class UserLoginTask extends AsyncTask<Void, Void, AuthenticationResult> {
             return new AuthenticationResult(false, null, false);
         }
 
-        // A proper backend integration should be connected here that will log the user in
+        // TODO A proper backend integration should be connected here that will log the user in
         // and check their customer ID for their data opt out status
         String customerIdFromServer = "customerIdFromServer";
         boolean isUserPrivacyOptedOut = false;

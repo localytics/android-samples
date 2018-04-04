@@ -62,7 +62,7 @@ public class MainActivity extends Activity {
         Localytics.setPrivacyOptedOut(privacyOptedOut);
         Localytics.pauseDataUploading(false);
         Localytics.setLocationMonitoringEnabled(true);
-        //Make a call to your servers to update the status of data collection opt out for this user.
+        //TODO Make a call to your servers to update the status of data collection opt out for this user.
     }
 
     private void navigateToLogin() {

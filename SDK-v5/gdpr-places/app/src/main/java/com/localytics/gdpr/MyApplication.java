@@ -25,7 +25,7 @@ public class MyApplication extends Application {
                 @Override
                 public void run() {
                     String customerId = Localytics.getCustomerId();
-                    // A proper backend integration should be connected here that will test the user's
+                    // TODO A proper backend integration should be connected here that will test the user's
                     // opt out status
                     boolean isUserPrivacyOptedOut = false;
 
