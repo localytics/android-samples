@@ -6,3 +6,4 @@
 * Push Configuration with a Standard BroadcastReceiver [SDK v4](SDK-v4/standard-push-broadcastreceiver) [SDK v5](SDK-v5/standard-push-broadcastreceiver)
 * Rich Push Examples [SDK v4](SDK-v4/rich-push) [SDK v5](SDK-v5/rich-push)
 * Places Dwell Time triggering [SDK v4](SDK-v4/places-dwell-time) [SDK v5](SDK-v5/places-dwell-time)
+* GDPR (SDK v5.1+ only) [Standard](SDK-v5/gdpr) [With Places](SDK-v5/gdpr-places)
