@@ -11,9 +11,10 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        Localytics.setLoggingEnabled(true);
-        Localytics.pauseDataUploading(true);
-        Localytics.autoIntegrate(this);
+        final LocalyticsGDPRWrapper localyticsGDPRWrapper = LocalyticsGDPRWrapper.getInstance();
+        localyticsGDPRWrapper.setLoggingEnabled(true);
+        localyticsGDPRWrapper.pauseDataUploading(true);
+        localyticsGDPRWrapper.autoIntegrate(this);
 
         //If the user is not logged in then they will be forced to login
         if (SharedPreferencesUtil.isUserLoggedIn(this)) {
@@ -23,21 +24,22 @@ public class MyApplication extends Application {
 
                 @Override
                 public void run() {
-                    String customerId = Localytics.getCustomerId();
+                    String customerId = localyticsGDPRWrapper.getCustomerId();
                     // TODO A proper backend integration should be connected here that will test the user's
                     // opt out status
                     boolean isUserPrivacyOptedOut = false;
 
-                    Localytics.setPrivacyOptedOut(isUserPrivacyOptedOut);
+                    localyticsGDPRWrapper.setPrivacyOptedOut(isUserPrivacyOptedOut);
                     if (!isUserPrivacyOptedOut) {
-                        Localytics.setLocationMonitoringEnabled(true);
+                        // If you are using Places then you should uncomment the below line (and make sure to import play-services-location).
+//                        localyticsGDPRWrapper.setLocationMonitoringEnabled(true);
                     }
-                    Localytics.pauseDataUploading(false);
+                    localyticsGDPRWrapper.pauseDataUploading(false);
                 }
             });
         } else {
             // If you are using Places then you should uncomment the below line (and make sure to import play-services-location).
-            // Localytics.setLocationMonitoringEnabled(true);
+            // localyticsGDPRWrapper.setLocationMonitoringEnabled(true);
         }
     }
 }
