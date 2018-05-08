@@ -14,7 +14,7 @@ public class MyApplication extends Application {
         final LocalyticsGDPRWrapper localyticsGDPRWrapper = LocalyticsGDPRWrapper.getInstance();
         localyticsGDPRWrapper.setLoggingEnabled(true);
         localyticsGDPRWrapper.pauseDataUploading(true);
-        localyticsGDPRWrapper.autoIntegrate(this);
+        localyticsGDPRWrapper.integrate(this);
 
         //If the user is not logged in then they will be forced to login
         if (SharedPreferencesUtil.isUserLoggedIn(this)) {

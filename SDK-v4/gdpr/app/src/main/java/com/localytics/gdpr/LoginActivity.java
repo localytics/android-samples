@@ -95,6 +95,21 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         LocalyticsGDPRWrapper.getInstance().onNewIntent(this, intent);
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        LocalyticsGDPRWrapper.getInstance().onActivityResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        LocalyticsGDPRWrapper.getInstance().onActivityPause(this);
+    }
+
     private void populateAutoComplete() {
         if (!mayRequestContacts()) {
             return;

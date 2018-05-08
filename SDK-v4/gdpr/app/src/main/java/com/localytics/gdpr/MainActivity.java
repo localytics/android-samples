@@ -68,6 +68,20 @@ public class MainActivity extends Activity {
         LocalyticsGDPRWrapper.getInstance().onNewIntent(this, intent);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        LocalyticsGDPRWrapper.getInstance().onActivityResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        LocalyticsGDPRWrapper.getInstance().onActivityPause(this);
+    }
+
     private void logOutClicked() {
         LocalyticsGDPRWrapper.getInstance().logout();
         SharedPreferencesUtil.setUserLoggedIn(this, false);

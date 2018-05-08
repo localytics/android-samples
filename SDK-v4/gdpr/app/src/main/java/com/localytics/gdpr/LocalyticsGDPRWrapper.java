@@ -18,7 +18,7 @@ import java.util.List;
  *
  * This implementation expects that every time the app is created, the opted in state of the user is
  * checked against a backend source of truth.  As a result, the opted in state will be stored as an
- * instance variable, and persistant storage will not be required.
+ * instance variable, and persistent storage will not be required.
  */
 public class LocalyticsGDPRWrapper {
 
@@ -38,12 +38,7 @@ public class LocalyticsGDPRWrapper {
     /**
      * A queue of event datapoints that have been triggered by the app while the user's opt in state is unknown
      */
-    private List<Event> eventQueue = new ArrayList<Event>();
-
-    /**
-     * A queue of profile datapoints that have been triggered by the app while the user's opt in state is unknown
-     */
-    private List<Profile> profileQueue = new ArrayList<Profile>();
+    private List<Runnable> eventQueue = new ArrayList<>();
 
     static LocalyticsGDPRWrapper getInstance() {
         if (INSTANCE == null) {
@@ -63,21 +58,103 @@ public class LocalyticsGDPRWrapper {
     //    Integration/Session tracking methods.
 
     public void autoIntegrate(Application application) {
-        Localytics.autoIntegrate(application, "YOUR-LOCALYTICS-APP-KEY");
+        throw new RuntimeException("You can't use autoIntegrate while supporting GDPR");
     }
 
-    public void onNewIntent(Activity activity, Intent intent) {
-        Localytics.onNewIntent(activity, intent);
+    public void integrate(Context context) {
+        Localytics.integrate(context, "YOUR-LOCALYTICS-APP-KEY");
+    }
+
+    public void onNewIntent(final Activity activity, final Intent intent) {
+        if (optedOut) {
+            return;
+        }
+
+        if (queueDatapoints) {
+            eventQueue.add(new Runnable() {
+                @Override
+                public void run() {
+                    Localytics.onNewIntent(activity, intent);
+                }
+            });
+        } else {
+            Localytics.onNewIntent(activity, intent);
+        }
+    }
+
+    public void openSession() {
+        if (optedOut) {
+            return;
+        }
+
+        if (queueDatapoints) {
+            eventQueue.add(new Runnable() {
+                @Override
+                public void run() {
+                    Localytics.openSession();
+                }
+            });
+        } else {
+            Localytics.openSession();
+        }
+    }
+
+    public void closeSession() {
+        if (optedOut) {
+            return;
+        }
+
+        if (queueDatapoints) {
+            eventQueue.add(new Runnable() {
+                @Override
+                public void run() {
+                    Localytics.closeSession();
+                }
+            });
+        } else {
+            Localytics.closeSession();
+        }
+    }
+
+    public void onActivityResume(final Activity activity) {
+        if (optedOut) {
+            return;
+        }
+
+        if (queueDatapoints) {
+            eventQueue.add(new Runnable() {
+                @Override
+                public void run() {
+                    Localytics.onActivityResume(activity);
+                }
+            });
+        } else {
+            Localytics.onActivityResume(activity);
+        }
+    }
+
+    public void onActivityPause(final Activity activity) {
+        if (optedOut) {
+            return;
+        }
+
+        if (queueDatapoints) {
+            eventQueue.add(new Runnable() {
+                @Override
+                public void run() {
+                    Localytics.onActivityPause(activity);
+                }
+            });
+        } else {
+            Localytics.onActivityPause(activity);
+        }
     }
 
     public void pauseDataUploading(boolean pause) {
         queueDatapoints = pause;
         if (!pause) {
-            for (Event event : eventQueue) {
-                event.tagEvent();
-            }
-            for (Profile profile : profileQueue) {
-                profile.tagProfile();
+            for (Runnable event : eventQueue) {
+                event.run();
             }
         }
     }
@@ -121,7 +198,6 @@ public class LocalyticsGDPRWrapper {
 //            If you are using places, we suggest shutting it down when a user opts out.
 //            Localytics.setLocationMonitoringEnabled(false);
             eventQueue.clear();
-            profileQueue.clear();
         } else {
 //            If you are using places, make sure to re-enable places when a user opts back in.
 //            Localytics.setLocationMonitoringEnabled(true);
@@ -132,65 +208,39 @@ public class LocalyticsGDPRWrapper {
     // Example of implementing tagEvent and setProfileAttribute.
     // Any additional event or profile methods overridden should follow a similar protocol.
 
-    public void tagEvent(String eventName, HashMap<String, String> attributes, long clv) {
+    public void tagEvent(final String eventName, final HashMap<String, String> attributes, final long clv) {
         if (optedOut) {
             return;
         }
 
         if (queueDatapoints) {
-            eventQueue.add(new Event(eventName, attributes, clv));
+            eventQueue.add(new Runnable() {
+                @Override
+                public void run() {
+                    Localytics.tagEvent(eventName, attributes, clv);
+                }
+            });
         } else {
             Localytics.tagEvent(eventName, attributes, clv);
         }
     }
 
-    public void setProfileAttribute(String attribute, String value, Localytics.ProfileScope scope) {
+    public void setProfileAttribute(final String attribute, final String value, final Localytics.ProfileScope scope) {
         if (optedOut) {
             return;
         }
 
         if (queueDatapoints) {
-            profileQueue.add(new Profile(attribute, value, scope));
+            eventQueue.add(new Runnable() {
+                @Override
+                public void run() {
+                    Localytics.setProfileAttribute(attribute, value, scope);
+                }
+            });
         } else {
             Localytics.setProfileAttribute(attribute, value, scope);
         }
 
     }
 
-    private final class Event {
-
-        private final String eventName;
-        private final HashMap<String, String> attributes;
-        private final long clv;
-
-        Event(String eventName, HashMap<String, String> attributes, long clv) {
-            this.eventName = eventName;
-            this.attributes = attributes;
-            this.clv = clv;
-        }
-
-        void tagEvent() {
-            Localytics.tagEvent(eventName, attributes, clv);
-        }
-    }
-
-    private final class Profile {
-
-        private final String attribute;
-        private final String value;
-        private final Localytics.ProfileScope scope;
-
-        Profile(String attribute, String value, Localytics.ProfileScope scope) {
-            this.attribute = attribute;
-            this.value = value;
-            this.scope = scope;
-        }
-
-
-        // For a more complete implementation, you will need to distinguish between various
-        // Profile calls (eg. setProfileAttribute, incrementProfileAttribute...)
-        void tagProfile() {
-            Localytics.setProfileAttribute(attribute, value, scope);
-        }
-    }
 }
