@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: com.localytics.android:library-5.2.1">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/library-5.2.1.aar/25082c129eb78e48b0e7dff9cd720e35/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/library-5.2.1.aar/25082c129eb78e48b0e7dff9cd720e35/res" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.localytics.android/library/5.2.1/73f5993bd8eeba5a8572602d050ddd271481b932/library-5.2.1-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES />
+  </library>
+</component>
