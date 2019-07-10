@@ -90,6 +90,10 @@ public class FirebaseService extends FirebaseMessagingService {
         // Setting the value of ll_launch_intent will direct Localytics to open this intent instead
         // of the activity defined with android.intent.category.LAUNCHER
         trackingIntent.putExtra("ll_launch_intent", deeplinkIntent);
+        // For customers on SDK 5.6.1+ it is required to add this local authentication token to 
+        // validate this intent as a valid source. If no mathcing token is found, the Localytics 
+        // SDK ignores this intent
+        trackingIntent.putExtra("ll_launch_intent_token", Localytics.getLocalAuthenticationToken());
 
         // If both a "ll_deep_link_url" is defined as well as a "ll_launch_intent", Localytics will
         // prioritize the "ll_deep_link_url" and use that as the destination.  If this is not
