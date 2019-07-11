@@ -91,7 +91,7 @@ public class FirebaseService extends FirebaseMessagingService {
         // of the activity defined with android.intent.category.LAUNCHER
         trackingIntent.putExtra("ll_launch_intent", deeplinkIntent);
         // For customers on SDK 5.6.1+ it is required to add this local authentication token to 
-        // validate this intent as a valid source. If no mathcing token is found, the Localytics 
+        // validate this intent as a valid source. If no matching token is found, the Localytics 
         // SDK ignores this intent
         trackingIntent.putExtra("ll_launch_intent_token", Localytics.getLocalAuthenticationToken());
 
