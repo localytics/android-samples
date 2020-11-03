@@ -7,3 +7,4 @@
 * Rich Push Examples [SDK v4](SDK-v4/rich-push) | [SDK v5](SDK-v5/android/rich-push)
 * Places Dwell Time triggering [SDK v4](SDK-v4/places-dwell-time) | [SDK v5](SDK-v5/android/places-dwell-time)
 * GDPR [SDK v4](SDK-v4/gdpr) | [SDK v5.1](SDK-v5/android/gdpr) | [SDK v5.1 With Places](SDK-v5/android/gdpr-places)
+* Onboarding In-App Example [SDK v6](SDK-v6/Onboarding)
